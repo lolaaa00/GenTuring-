@@ -2,6 +2,14 @@
 
 GenTuring is a decentralized Turing Test game where users chat with an opponent and guess whether they are talking to a human or an AI. The judgment is made on-chain using GenLayer's Intelligent Contracts and Optimistic Democracy consensus.
 
+## Demo Video
+
+https://www.youtube.com/watch?v=yJqzWqcj_UM
+
+## Live App
+
+https://gen-turing.vercel.app/
+
 ## How it works
 
 1. User chats with an opponent (human or AI)
@@ -12,10 +20,10 @@ GenTuring is a decentralized Turing Test game where users chat with an opponent 
 
 ## GenLayer Integration
 
-**Contract file:** `gen_turing.py`  
-**Contract address:** `0x5A72e203BF7574b0CaAe36E4351b32B95Cd3Bc7A`  
-**Network:** Bradbury Testnet  
-**SDK:** genlayer-js  
+**Contract file:** `gen_turing.py`
+**Contract address:** `0x5A72e203BF7574b0CaAe36E4351b32B95Cd3Bc7A`
+**Network:** Bradbury Testnet
+**SDK:** genlayer-js
 
 The contract uses `gl.exec_prompt()` to analyze whether a message was written by a human or AI, and `gl.eq_principle_strict_eq()` to reach consensus across multiple validators through Optimistic Democracy.
 
@@ -28,10 +36,6 @@ The contract uses `gl.exec_prompt()` to analyze whether a message was written by
 - Tailwind CSS
 - Deployed on Vercel
 
-## Live Demo
-
-https://gen-turing.vercel.app/
-
 ## Run locally
 
 ```bash
@@ -41,5 +45,5 @@ npm run dev
 
 ## Contract deployment
 
-The Intelligent Contract is deployed on GenLayer Studio (Bradbury Testnet).  
+The Intelligent Contract is deployed on GenLayer Studio (Bradbury Testnet).
 Source: `gen_turing.py`
