@@ -4,7 +4,7 @@ import { testnetBradbury } from 'genlayer-js/chains';
 const client = createClient({ network: testnetBradbury });
 
 // Paste your contract address here after deploying on Studio
-export const CONTRACT_ADDRESS = '0xYOUR_ADDRESS_HERE';
+export const CONTRACT_ADDRESS = '0x5A72e203BF7574b0CaAe36E4351b32B95Cd3Bc7A';
 
 export async function judgeWithGenLayer(
   message: string,
