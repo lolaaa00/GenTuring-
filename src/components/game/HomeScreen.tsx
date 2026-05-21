@@ -12,10 +12,11 @@ interface HomeScreenProps {
   walletAddress: string | null;
   score: number;
   totalGames: number;
+  accuracy?: number;
   mode: AppMode;
 }
 
-export default function HomeScreen({ onStartMatch, onModeChange, onConnectWallet, walletAddress, score, totalGames, mode }: HomeScreenProps) {
+export default function HomeScreen({ onStartMatch, onModeChange, onConnectWallet, walletAddress, score, totalGames, accuracy = 0, mode }: HomeScreenProps) {
   const canStart = Boolean(walletAddress);
 
   return (
@@ -40,7 +41,7 @@ export default function HomeScreen({ onStartMatch, onModeChange, onConnectWallet
         {/* GenLayer badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-5">
           <img src={genlayerLogo} alt="GenLayer" className="w-4 h-4 invert" />
-          <span className="font-display text-[10px] tracking-widest text-primary uppercase">Powered by GenLayer · Bradbury Testnet</span>
+          <span className="font-display text-[10px] tracking-widest text-primary uppercase">Powered by GenLayer · Studionet</span>
         </div>
 
         {/* Logo + Title */}
@@ -74,8 +75,8 @@ export default function HomeScreen({ onStartMatch, onModeChange, onConnectWallet
         <div className="flex gap-4 mb-5">
           {[
             { value: score, label: 'YOUR SCORE', color: 'text-primary' },
-            { value: totalGames, label: 'GAMES', color: 'text-foreground' },
-            { value: 5, label: 'VALIDATORS', color: 'text-accent' },
+            { value: totalGames, label: 'MATCHES', color: 'text-foreground' },
+            { value: `${accuracy}%`, label: 'ACCURACY', color: 'text-accent' },
           ].map((s) => (
             <div key={s.label} className="text-center px-5 py-2 rounded-lg border border-border bg-card/50">
               <div className={`font-display text-xl ${s.color}`}>{s.value}</div>

@@ -35,7 +35,7 @@ export default function FaucetInfo({ onClose }: FaucetInfoProps) {
           </div>
           <div className="p-3 rounded-lg bg-muted/50 border border-border">
             <div className="font-display text-xs text-primary mb-2">STEP 2</div>
-            <p className="text-sm text-foreground">Visit the GenLayer hackathon portal</p>
+            <p className="text-sm text-foreground">Open GenLayer Studio and switch to Studionet</p>
             <a
               href="https://studio.genlayer.com"
               target="_blank"
@@ -47,8 +47,8 @@ export default function FaucetInfo({ onClose }: FaucetInfoProps) {
           </div>
           <div className="p-3 rounded-lg bg-muted/50 border border-border">
             <div className="font-display text-xs text-primary mb-2">STEP 3</div>
-            <p className="text-sm text-foreground">Request Bradbury testnet faucet tokens</p>
-            <p className="text-xs text-muted-foreground mt-1">Or use the Discord faucet command: /faucet [address]</p>
+            <p className="text-sm text-foreground">Use the built-in Studionet faucet from the Studio account selector</p>
+            <p className="text-xs text-muted-foreground mt-1">Studionet uses GEN on chain ID 61999 and funds are dispensed directly inside Studio.</p>
           </div>
         </div>
       </motion.div>

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { Bot, User, CheckCircle2, XCircle, AlertTriangle, Shield, ExternalLink, RotateCcw, Gavel, Coins, Copy } from 'lucide-react';
+import { Bot, User, CheckCircle2, XCircle, AlertTriangle, Shield, RotateCcw, Gavel, Coins, Copy, BrainCircuit, Target } from 'lucide-react';
+import { STUDIONET_EXPLORER } from '@/genlayer';
 import type { ValidatorResult } from '@/lib/gameEngine';
 
 interface ResultScreenProps {
@@ -9,20 +10,24 @@ interface ResultScreenProps {
   validators: ValidatorResult[];
   score: number;
   onAppeal: () => void;
-  onVerifyGenLayer: () => void;
   onPlayAgain: () => void;
-  walletAddress: string | null;
   txHash: string | null;
   appealCount: number;
+  matchId: string | null;
+  confidence: 'low' | 'medium' | 'high' | null;
+  reason: string | null;
+  totalGames: number;
+  correctGuesses: number;
+  accuracy: number;
 }
 
 export default function ResultScreen({
   userGuess, consensus, actualType, validators, score,
-  onAppeal, onVerifyGenLayer, onPlayAgain, walletAddress, txHash, appealCount
+  onAppeal, onPlayAgain, txHash, appealCount,
+  matchId, confidence, reason, totalGames, correctGuesses, accuracy,
 }: ResultScreenProps) {
   const actual = actualType === 'ai' ? 'AI' : 'Human';
   const userCorrect = userGuess === actual;
-  const consensusCorrect = consensus === actual;
   const aiVotes = validators.filter(v => v.classification === 'AI').length;
   const humanVotes = validators.filter(v => v.classification === 'Human').length;
 
@@ -39,7 +44,7 @@ export default function ResultScreen({
         >
           <div className="flex items-center justify-center gap-2 mb-3">
             <CheckCircle2 className="w-5 h-5 text-secondary" />
-            <span className="font-display text-xs text-secondary tracking-widest uppercase">Consensus Reached</span>
+            <span className="font-display text-xs text-secondary tracking-widest uppercase">GenLayer Match Finalized</span>
           </div>
           <div className="flex items-center justify-center gap-3 mb-2">
             {consensus === 'AI' ? <Bot className="w-10 h-10 text-primary" /> : <User className="w-10 h-10 text-accent" />}
@@ -48,6 +53,23 @@ export default function ResultScreen({
           <p className="text-muted-foreground text-sm">
             {aiVotes} AI votes / {humanVotes} Human votes ({validators.length} validators)
           </p>
+
+          {(confidence || matchId) && (
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
+              {confidence && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1">
+                  <BrainCircuit className="w-3.5 h-3.5 text-primary" />
+                  Confidence: <span className="text-foreground uppercase">{confidence}</span>
+                </span>
+              )}
+              {matchId && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1">
+                  <Target className="w-3.5 h-3.5 text-accent" />
+                  {matchId}
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Vote bar */}
           <div className="mt-4 h-3 rounded-full bg-muted overflow-hidden flex">
@@ -104,6 +126,33 @@ export default function ResultScreen({
               <span className="text-sm text-primary font-display">{score > 0 ? '+' : ''}{score} pts</span>
             </div>
           </motion.div>
+        </div>
+
+        {reason && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="p-4 rounded-lg border border-secondary/20 bg-secondary/5"
+          >
+            <div className="font-display text-xs text-secondary tracking-wider mb-2">CONTRACT REASONING</div>
+            <p className="text-sm text-foreground leading-relaxed">{reason}</p>
+          </motion.div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-4 rounded-xl border border-border bg-card/50">
+            <div className="font-display text-xs tracking-wider text-muted-foreground mb-1">YOUR MATCHES</div>
+            <div className="font-display text-2xl text-foreground">{totalGames}</div>
+          </div>
+          <div className="p-4 rounded-xl border border-border bg-card/50">
+            <div className="font-display text-xs tracking-wider text-muted-foreground mb-1">CORRECT GUESSES</div>
+            <div className="font-display text-2xl text-primary">{correctGuesses}</div>
+          </div>
+          <div className="p-4 rounded-xl border border-border bg-card/50">
+            <div className="font-display text-xs tracking-wider text-muted-foreground mb-1">ACCURACY</div>
+            <div className="font-display text-2xl text-accent">{accuracy}%</div>
+          </div>
         </div>
 
         {/* Equivalence Principle Note */}
@@ -178,23 +227,13 @@ export default function ResultScreen({
             </button>
           )}
 
-          {walletAddress && !txHash && (
-            <button
-              onClick={onVerifyGenLayer}
-              className="flex items-center gap-2 px-5 py-3 rounded-lg border border-secondary/30 bg-secondary/5 text-secondary hover:bg-secondary/10 transition-all font-display text-xs tracking-wider"
-            >
-              <ExternalLink className="w-4 h-4" />
-              VERIFY ON GENLAYER
-            </button>
-          )}
-
           {txHash && (
             <div className="flex items-center gap-2 px-5 py-3 rounded-lg border border-secondary/40 bg-secondary/10">
               <CheckCircle2 className="w-4 h-4 text-secondary" />
               <div>
                 <div className="font-display text-xs text-secondary">Verified on GenLayer</div>
                 <a
-                  href={`https://explorer-bradbury.genlayer.com/tx/${txHash}`}
+                  href={`${STUDIONET_EXPLORER}/tx/${txHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-display text-[10px] text-muted-foreground hover:text-primary transition-colors"

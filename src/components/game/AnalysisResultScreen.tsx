@@ -1,29 +1,25 @@
 import { motion } from 'framer-motion';
-import { CheckCircle2, Copy, ExternalLink, FileSearch, RotateCcw, Shield, Sparkles } from 'lucide-react';
+import { FileSearch, RotateCcw, Shield, Sparkles } from 'lucide-react';
 import type { ValidatorResult } from '@/lib/gameEngine';
 
 interface AnalysisResultScreenProps {
   content: string;
   consensus: 'AI' | 'Human';
   validators: ValidatorResult[];
-  onVerifyGenLayer: () => void;
   onAnalyzeAnother: () => void;
   onAppeal: () => void;
-  walletAddress: string | null;
-  txHash: string | null;
   appealCount: number;
+  reason: string | null;
 }
 
 export default function AnalysisResultScreen({
   content,
   consensus,
   validators,
-  onVerifyGenLayer,
   onAnalyzeAnother,
   onAppeal,
-  walletAddress,
-  txHash,
   appealCount,
+  reason,
 }: AnalysisResultScreenProps) {
   const aiVotes = validators.filter((validator) => validator.classification === 'AI').length;
   const humanVotes = validators.length - aiVotes;
@@ -81,6 +77,13 @@ export default function AnalysisResultScreen({
           </p>
         </div>
 
+        {reason && (
+          <div className="rounded-xl border border-secondary/20 bg-secondary/5 p-4">
+            <div className="font-display text-xs text-secondary tracking-wider mb-1">MODE NOTE</div>
+            <p className="text-xs text-foreground leading-relaxed">{reason}</p>
+          </div>
+        )}
+
         <div className="space-y-3">
           <h3 className="font-display text-sm text-muted-foreground tracking-wider">VALIDATOR DECISIONS ({validators.length})</h3>
           {validators.map((validator, index) => (
@@ -121,40 +124,6 @@ export default function AnalysisResultScreen({
             >
               Re-run consensus ({5 + appealCount * 2} → {5 + (appealCount + 1) * 2} validators)
             </button>
-          )}
-
-          {walletAddress && !txHash && (
-            <button
-              onClick={onVerifyGenLayer}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-secondary/30 bg-secondary/5 text-secondary font-display text-xs tracking-widest uppercase transition-all hover:bg-secondary/10"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Verify on GenLayer
-            </button>
-          )}
-
-          {txHash && (
-            <div className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-secondary/40 bg-secondary/10">
-              <CheckCircle2 className="w-4 h-4 text-secondary" />
-              <div>
-                <div className="font-display text-xs text-secondary">Verified on GenLayer</div>
-                <a
-                  href={`https://explorer-bradbury.genlayer.com/tx/${txHash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-display text-[10px] text-muted-foreground hover:text-primary transition-colors"
-                >
-                  {txHash.slice(0, 16)}...{txHash.slice(-8)}
-                </a>
-              </div>
-              <button
-                onClick={() => { navigator.clipboard.writeText(txHash); }}
-                className="ml-2 p-1.5 rounded-md border border-border hover:bg-muted transition-colors"
-                title="Copy transaction hash"
-              >
-                <Copy className="w-3.5 h-3.5 text-muted-foreground" />
-              </button>
-            </div>
           )}
 
           <button

@@ -28,8 +28,14 @@ export interface GameState {
   userGuess: 'AI' | 'Human' | null;
   validators: ValidatorResult[];
   consensus: 'AI' | 'Human' | null;
+  matchId: string | null;
+  confidence: 'low' | 'medium' | 'high' | null;
+  reason: string | null;
   score: number;
   totalGames: number;
+  correctGuesses: number;
+  accuracy: number;
+  globalCorrectGuesses: number;
   walletAddress: string | null;
   txHash: string | null;
   appealCount: number;
@@ -281,7 +287,7 @@ function analyzeSignals(content: string) {
   const rigidPunctuation = /[;:]/.test(text);
   const personalPronouns = /\b(i|me|my|we|our|myself)\b/i.test(text);
   const hedging = /\b(maybe|probably|i think|i guess|sort of|kind of|might|perhaps)\b/i.test(text);
-  const listPattern = /(\d+\.\s|\-\s|\*\s)/g;
+  const listPattern = /(\d+\.\s|-\s|\*\s)/g;
   const hasList = (text.match(listPattern) || []).length >= 2;
   const perfectGrammar = !typos && !slang && avgSentenceLen > 15;
 
@@ -383,8 +389,14 @@ export const INITIAL_GAME_STATE: GameState = {
   userGuess: null,
   validators: [],
   consensus: null,
+  matchId: null,
+  confidence: null,
+  reason: null,
   score: 0,
   totalGames: 0,
+  correctGuesses: 0,
+  accuracy: 0,
+  globalCorrectGuesses: 0,
   walletAddress: null,
   txHash: null,
   appealCount: 0,

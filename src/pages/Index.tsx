@@ -16,7 +16,7 @@ import genturingLogo from '@/assets/genturing-logo.png';
 export default function Index() {
   const {
     state, startSelectedMode, setMode, sendMessage, submitGuess,
-    analyzeContent, appeal, verifyOnGenLayer, connectWallet, resetGame, setPhase,
+    analyzeContent, appeal, connectWallet, resetGame, setPhase,
   } = useGameState();
   const [showFaucet, setShowFaucet] = useState(false);
 
@@ -73,6 +73,7 @@ export default function Index() {
               walletAddress={state.walletAddress}
               score={state.score}
               totalGames={state.totalGames}
+              accuracy={state.accuracy}
               mode={state.mode}
             />
           )}
@@ -112,15 +113,19 @@ export default function Index() {
               <ResultScreen
                 userGuess={state.userGuess!}
                 consensus={state.consensus}
-                actualType={state.opponentType}
+                actualType={state.consensus === 'AI' ? 'ai' : 'human'}
                 validators={state.validators}
                 score={state.score}
                 onAppeal={appeal}
-                onVerifyGenLayer={verifyOnGenLayer}
                 onPlayAgain={resetGame}
-                walletAddress={state.walletAddress}
                 txHash={state.txHash}
                 appealCount={state.appealCount}
+                matchId={state.matchId}
+                confidence={state.confidence}
+                reason={state.reason}
+                totalGames={state.totalGames}
+                correctGuesses={state.correctGuesses}
+                accuracy={state.accuracy}
               />
             </motion.div>
           )}
@@ -130,12 +135,10 @@ export default function Index() {
                 content={state.analysisInput}
                 consensus={state.consensus}
                 validators={state.validators}
-                onVerifyGenLayer={verifyOnGenLayer}
                 onAnalyzeAnother={resetGame}
                 onAppeal={appeal}
-                walletAddress={state.walletAddress}
-                txHash={state.txHash}
                 appealCount={state.appealCount}
+                reason={state.reason}
               />
             </motion.div>
           )}
